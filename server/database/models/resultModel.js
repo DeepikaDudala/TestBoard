@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 
 const resultSchema = new mongoose.Schema({
-  student: {
+  studentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: [true, "A result must have a student"],
   },
-  test: {
+  studentName: String,
+  testName: String,
+  testId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Test",
     required: [true, "A result must be associated with a test"],

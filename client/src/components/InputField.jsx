@@ -8,7 +8,7 @@ function InputField({ type, place, id, name, value, handleChange }) {
         name={name}
         value={value}
         onChange={handleChange}
-        className="input-bottom-border my-3"
+        className="input-bottom-border my-3 p-2 w-50"
       />
     </div>
   );

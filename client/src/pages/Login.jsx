@@ -2,8 +2,12 @@ import FormBack from "../components/FormBack";
 import InputField from "../components/InputField";
 import LoginLogo from "./../assets/LoginLogo.svg";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { login, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -11,6 +15,23 @@ function Login() {
     password: "",
   });
   const { email, password } = formData;
+  const { user, isSuccess, isLoading, isError, message } = useSelector(
+    (state) => state.auth
+  );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccess && user) {
+      toast.success("Successfully logged in!!");
+      navigate("/tests");
+    }
+    dispatch(reset());
+  }, [dispatch, isError, isSuccess, user]);
+
   const handleChange = (e) => {
     setFormData((preFormData) => ({
       ...preFormData,
@@ -19,7 +40,16 @@ function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    const userData = {
+      email,
+      password,
+    };
+    dispatch(login(userData));
   };
+  if (isLoading) {
+    1;
+    return <Spinner />;
+  }
   return (
     <FormBack
       img={LoginLogo}

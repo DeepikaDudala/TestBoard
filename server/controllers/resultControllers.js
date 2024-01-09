@@ -4,13 +4,20 @@ const Result = require("../database/models/resultModel");
 
 const getAllResults = AsyncHandler(async (req, res) => {
   try {
-    const results = await Result.find({ test: req.params.id });
+    const test = await Test.findById(req.params.id).select({ testName: 1 });
+    const results = await Result.find({ testId: req.params.id }).select({
+      studentName: 1,
+      total: 1,
+      scored: 1,
+      percentage: 1,
+    });
     if (!results) {
       res.status(400);
       throw new Error("No Results Found");
     }
     res.status(200).json({
       status: "success",
+      testName: test.testName,
       count: results.length,
       data: {
         results,
@@ -23,8 +30,16 @@ const getAllResults = AsyncHandler(async (req, res) => {
 });
 const getResult = AsyncHandler(async (req, res) => {
   try {
-    const result = await Result.findById(req.params.id);
-    if (!result || result.student != req.user.id) {
+    const result = await Result.find({
+      studentId: req.user.id,
+      _id: req.params.id,
+    }).select({
+      testName: 1,
+      total: 1,
+      scored: 1,
+      percentage: 1,
+    });
+    if (!result) {
       res.status(404);
       throw new Error("Result not found");
     }
@@ -41,7 +56,10 @@ const getResult = AsyncHandler(async (req, res) => {
 });
 const getResults = AsyncHandler(async (req, res) => {
   try {
-    const results = await Result.find({ student: req.user.id });
+    const results = await Result.find({ studentId: req.user.id }).select({
+      testName: 1,
+      _id: 1,
+    });
     if (!results) {
       res.status(404);
       throw new Error("Results not found");
@@ -74,8 +92,14 @@ const createResult = AsyncHandler(async (req, res) => {
     });
     const percentage = (score / test.totalMarks) * 100;
 
-    const filter = { student: req.user._id, test: req.params.id };
-    const update = { total: test.totalMarks, scored: score, percentage };
+    const filter = { studentId: req.user._id, testId: req.params.id };
+    const update = {
+      testName: test.testName,
+      studentName: req.user.name,
+      total: test.totalMarks,
+      scored: score,
+      percentage,
+    };
     const result = await Result.findOneAndUpdate(filter, update, {
       new: true,
       upsert: true,
@@ -87,7 +111,7 @@ const createResult = AsyncHandler(async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400);
+    res.status(401);
     throw new Error(err);
   }
 });

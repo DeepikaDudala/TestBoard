@@ -13,6 +13,7 @@ body {
   border-left: none !important;
   border-right: none !important;
   border-top: none !important;
+  font-size: small;
 }
 
 .input-bottom-border::placeholder {
@@ -24,35 +25,6 @@ body {
   color: rgb(97, 173, 236);
   text-decoration: none;
 }
-/* Home.css */
-
-.hero {
-  background-image: url("./../public/wepik-export-20231109193132sIn9.png"); /* Add your hero image */
-  background-size: cover;
-  background-position: center;
-  padding: 100px 0;
-}
-
-.about {
-  padding: 50px 0;
-}
-
-.parallax {
-  background-image: url("./../public/wepik-export-20231109193132sIn9.png"); /* Add your parallax image */
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  color: #fff;
-  padding: 100px 0;
-}
-
-.back-img {
-  background: linear-gradient(to right, #e7f7fd, #e9ecfc, #ece0fb);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .shadow-box {
   background-color: #fff;
@@ -63,4 +35,34 @@ body {
   font-size: 10px;
   color: rgb(103, 163, 212);
   text-decoration: none;
+}
+.loadingSpinnerContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingSpinner {
+  width: 64px;
+  height: 64px;
+  border: 8px solid;
+  border-color: #000 transparent #555 transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

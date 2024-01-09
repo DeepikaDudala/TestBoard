@@ -18,12 +18,10 @@ const userRegister = AsyncHandler(async (req, res) => {
       user = await User.create({ name, email, password, role });
     }
     res.status(200).json({
-      status: "success",
-      data: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      token: createToken(user._id),
     });
   } catch (err) {
     res.status(400);
@@ -34,21 +32,31 @@ const userLogin = AsyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
-    throw new Error("please fill all fields");
+    throw new Error("Please fill all fields");
   }
+
   try {
     const user = await User.findOne({ email }).select("+password");
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      res.status(401);
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      res.status(400);
       throw new Error("Invalid email or password");
     }
+
     res.status(200).json({
-      status: "success",
+      _id: user._id,
+      email: user.email,
+      role: user.role,
       token: createToken(user.id),
     });
   } catch (err) {
     res.status(400);
-    throw new Error("User not Found");
+    throw err;
   }
 });
 

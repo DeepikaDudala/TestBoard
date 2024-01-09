@@ -2,10 +2,12 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const usersRoutes = require("./routes/usersRoutes");
+const cors = require("cors");
 const testRoutes = require("./routes/testsRoutes");
 const resultsRoutes = require("./routes/resultsRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
+app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny"));
 

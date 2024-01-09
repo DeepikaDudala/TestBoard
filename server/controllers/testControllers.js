@@ -4,10 +4,7 @@ exports.getAllTests = AsyncHandler(async (req, res) => {
   try {
     const tests = await Test.find().select("-questions");
     res.status(200).json({
-      tests: tests.length,
-      data: {
-        tests,
-      },
+      tests,
     });
   } catch (err) {
     res.status(400);
@@ -68,22 +65,3 @@ exports.deleteTest = AsyncHandler(async (req, res) => {
     throw new Error("failed to delete test");
   }
 });
-// exportsdeleteQuestion = AsyncHandler(async (req, res) => {});
-// exports.updateTest = AsyncHandler(async(req,res)=>{
-//    try {
-//      const test = await Test.findByIdAndUpdate(req.params.id)
-//      if (!test) {
-//        res.status(404);
-//        throw new Error("Test not found");
-//      }
-//      res.status(200).json({
-//        status: "success",
-//        data: {
-//          test,
-//        },
-//      });
-//    } catch (err) {
-//      res.status(400);
-//      throw new Error("failed to get test");
-//    }
-// })
