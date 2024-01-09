@@ -6,11 +6,12 @@ import { getTests, reset } from "../features/test/testSlice";
 
 function Tests() {
   const test = useSelector((state) => state.test);
+  const { isSuccess } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getTests());
     dispatch(reset());
-  }, []);
+  }, [isSuccess]);
   return (
     <div>
       <div className="container text-center">

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
+import { reset as resetTest } from "../features/test/testSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const Navbar = () => {
   const logoutUser = () => {
     dispatch(logout());
     dispatch(reset());
-    toast.info("user logged out!!");
+    dispatch(resetTest());
     navigate("/login");
   };
   return (
