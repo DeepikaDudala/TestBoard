@@ -1,17 +1,16 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, reset } from "../features/auth/authSlice";
-import { reset as resetTest } from "../features/test/testSlice";
-
+import { logout, reset as userReset } from "../features/auth/authSlice";
+import { reset as resetTests } from "../features/tests/testsSlice";
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const logoutUser = () => {
     dispatch(logout());
-    dispatch(reset());
-    dispatch(resetTest());
+    dispatch(userReset());
+    dispatch(resetTests());
     navigate("/login");
   };
   return (

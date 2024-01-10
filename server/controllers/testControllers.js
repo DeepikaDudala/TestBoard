@@ -21,10 +21,7 @@ exports.getTest = AsyncHandler(async (req, res) => {
       throw new Error("Test not found");
     }
     res.status(200).json({
-      status: "success",
-      data: {
-        test,
-      },
+      test,
     });
   } catch (err) {
     res.status(400);

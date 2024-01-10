@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import Tests from "./pages/Tests";
 import Results from "./pages/Results";
 import ResultCard from "./components/ResultCard";
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/tests" element={<Tests />} />
           <Route path="/results" element={<Results />} />
           <Route path="/result" element={<ResultCard />} />
+          <Route path="/tests/:id" element={<Test />} />
         </Routes>
       </Router>
       <ToastContainer />

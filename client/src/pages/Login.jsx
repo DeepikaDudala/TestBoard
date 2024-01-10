@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
+import { getTests } from "../features/tests/testsSlice";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ function Login() {
     if (isSuccess && user) {
       toast.success("Successfully logged in!!");
       navigate("/tests");
+      dispatch(getTests());
     }
     dispatch(reset());
   }, [dispatch, isError, isSuccess, user]);
@@ -47,7 +49,6 @@ function Login() {
     dispatch(login(userData));
   };
   if (isLoading) {
-    1;
     return <Spinner />;
   }
   return (

@@ -9,6 +9,7 @@ import InputField from "../components/InputField";
 import FormBack from "../components/FormBack";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
+import { getTests } from "../features/tests/testsSlice";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -33,6 +34,7 @@ function Register() {
     if (isSuccess && user) {
       toast.success("Successfully logged in!!");
       navigate("/tests");
+      dispatch(getTests());
     }
     dispatch(reset());
   }, [dispatch, isError, isSuccess, user]);
