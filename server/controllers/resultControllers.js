@@ -105,10 +105,7 @@ const createResult = AsyncHandler(async (req, res) => {
       upsert: true,
     });
     res.status(200).json({
-      status: "success",
-      data: {
-        result,
-      },
+      result,
     });
   } catch (err) {
     res.status(401);

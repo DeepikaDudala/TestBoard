@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import testsService from "./testsService";
+
 const test = JSON.parse(localStorage.getItem("test"));
 
 const initialState = {
@@ -26,11 +27,34 @@ export const getTest = createAsyncThunk(
     }
   }
 );
+export const createResult = createAsyncThunk(
+  "test/createResult",
+  async ({ id, answers }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      return await testsService.createResult(id, answers, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 const testSlice = createSlice({
   name: "test",
   initialState,
   reducers: {
     reset: (state) => {
+      state.isError = false;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.message = "";
+    },
+    remove: (state) => {
       localStorage.removeItem("test");
       state.test = [];
       state.isError = false;
@@ -59,4 +83,4 @@ const testSlice = createSlice({
 });
 
 export default testSlice.reducer;
-export const { reset } = testSlice.actions;
+export const { reset, remove } = testSlice.actions;

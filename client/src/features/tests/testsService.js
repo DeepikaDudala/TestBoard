@@ -24,9 +24,24 @@ const getTest = async (id, token) => {
   return response.data.test;
 };
 
+//create Result
+const createResult = async (id, answers, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.post(
+    API_URL + id + "/createResult",
+    { answers },
+    config
+  );
+  return response.data;
+};
 const testsService = {
   getTests,
   getTest,
+  createResult,
 };
 
 export default testsService;

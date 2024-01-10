@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { getTest, reset as resetTest } from "../features/tests/testSlice";
+import { reset as resetTest } from "../features/tests/testSlice";
 import { useDispatch } from "react-redux";
 function Instructions({ test, setTakeTest }) {
   const navigate = useNavigate();

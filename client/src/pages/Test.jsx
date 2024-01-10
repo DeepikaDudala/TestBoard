@@ -1,9 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import NoData from "../assets/NoData.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Instructions from "../components/Instructions";
-import { getTest, reset as resetTest } from "../features/tests/testSlice";
+import {
+  getTest,
+  reset as resetTest,
+  remove as removeTest,
+} from "../features/tests/testSlice";
+import Questions from "../components/Questions";
 
 function Test() {
   const { id } = useParams();
@@ -12,29 +17,24 @@ function Test() {
 
   const test = tests.find((test) => test._id === id);
   const questions = useSelector((state) => state.test.test.questions);
-  const { isError, isSuccess } = useSelector((state) => state.test);
+  const { isError } = useSelector((state) => state.test);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (isError || !isSuccess) {
-      dispatch(resetTest());
+    if (isError) {
+      dispatch(removeTest());
     }
-    if (takeTest || isSuccess) {
+    if (takeTest) {
+      console.log(`first`);
       dispatch(getTest(id));
     }
   }, [takeTest, isError]);
-
   return (
     <div className="container mt-5">
       {test ? (
-        takeTest ? (
-          <div>
-            {questions &&
-              questions.map((question) => (
-                <div key={question._id}>
-                  <h1>{question.text}</h1>
-                </div>
-              ))}
-          </div>
+        takeTest || questions ? (
+          questions && <Questions testId={id} questions={questions} />
         ) : (
           <div>
             <Instructions test={test} setTakeTest={setTakeTest} />
