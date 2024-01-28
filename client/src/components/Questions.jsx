@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createResult,
@@ -22,7 +22,19 @@ function Questions({ testId, questions }) {
     updated[qId] = oId;
     setOp(updated);
   };
-
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        alert("You switched the tab ");
+        alert("test is submitted");
+        handleSubmit();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
   const handleSubmit = async () => {
     await dispatch(createResult({ id: testId, answers: selOp }));
     dispatch(removeTest());

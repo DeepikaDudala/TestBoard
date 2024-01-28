@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import resultsService from "./resultsService";
-const results = JSON.parse(localStorage.getItem("results"));
 const initialState = {
-  results: results ? results : [],
+  results: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -29,7 +28,6 @@ const resultsSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      localStorage.removeItem("results");
       state.results = [];
       state.isError = false;
       state.isSuccess = false;

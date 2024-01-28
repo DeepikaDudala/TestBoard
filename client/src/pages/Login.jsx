@@ -52,6 +52,15 @@ function Login() {
     };
     dispatch(login(userData));
   };
+  useEffect(() => {
+    try {
+      if (user.token) {
+        navigate("/tests");
+      }
+    } catch (err) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   if (isLoading) {
     return <Spinner />;
@@ -79,7 +88,7 @@ function Login() {
             id="password"
             handleChange={handleChange}
           />
-          <Link to="/register" className="link-text">
+          <Link to="/" className="link-text">
             Create an account
           </Link>
           <Button text="Login" />

@@ -10,12 +10,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const logoutUser = () => {
+    navigate("/login");
     dispatch(logout());
     dispatch(userReset());
     dispatch(resetTests());
     dispatch(removeTest());
     dispatch(resetResults());
-    navigate("/login");
   };
   return (
     <nav className="navbar bg-body-tertiary navbar-color">
@@ -30,7 +30,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/register">
+                <Link className="nav-link" to="/">
                   Register
                 </Link>
               </li>

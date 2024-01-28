@@ -8,6 +8,8 @@ const authProtect = AsyncHandler(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
+      if (req.cookies?.sahi) console.log(req.cookies);
+      else console.log(req.cookies);
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.id);

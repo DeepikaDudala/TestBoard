@@ -51,6 +51,15 @@ function Register() {
     dispatch(reset());
   }, [dispatch, isError, isSuccess, user]);
 
+  useEffect(() => {
+    try {
+      if (user.token) {
+        navigate("/tests");
+      }
+    } catch (err) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   const handleChange = (e) => {
     setFormData((preFormData) => ({
       ...preFormData,

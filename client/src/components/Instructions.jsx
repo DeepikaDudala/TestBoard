@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { reset as resetTest } from "../features/tests/testSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 function Instructions({ test, setTakeTest }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -13,7 +13,6 @@ function Instructions({ test, setTakeTest }) {
   const handleContinue = () => {
     setTakeTest(true);
   };
-
   return (
     <div className="container text-center ">
       <div className="row justify-content-center">

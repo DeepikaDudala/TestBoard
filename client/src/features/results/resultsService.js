@@ -9,9 +9,7 @@ const getAllResults = async (token) => {
     },
   };
   const response = await axios.get(API_URL, config);
-  if (response.data) {
-    localStorage.setItem("results", JSON.stringify(response.data.results));
-  }
+
   return response.data.results;
 };
 

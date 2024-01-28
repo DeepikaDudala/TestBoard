@@ -6,8 +6,15 @@ const cors = require("cors");
 const testRoutes = require("./routes/testsRoutes");
 const resultsRoutes = require("./routes/resultsRoutes");
 const errorHandler = require("./middlewares/errorHandler");
-
-app.use(cors());
+const cookieParser = require("cookie-parser");
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+    methods: ["POST", "GET"],
+  })
+);
+app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("tiny"));
 

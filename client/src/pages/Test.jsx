@@ -9,6 +9,7 @@ import {
   remove as removeTest,
 } from "../features/tests/testSlice";
 import Questions from "../components/Questions";
+import Spinner from "../components/Spinner";
 
 function Test() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ function Test() {
   const test = tests.find((test) => test._id === id);
   const questions = useSelector((state) => state.test.test.questions);
   const { isError } = useSelector((state) => state.test);
+  const { isLoading } = useSelector((state) => state.test);
 
   const dispatch = useDispatch();
 
@@ -29,6 +31,9 @@ function Test() {
       dispatch(getTest(id));
     }
   }, [takeTest, isError]);
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="container mt-5">
