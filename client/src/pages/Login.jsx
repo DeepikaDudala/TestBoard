@@ -9,16 +9,19 @@ import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import Spinner from "../components/Spinner";
 import { getTests } from "../features/tests/testsSlice";
+import { getAllResults } from "../features/results/resultsSlice";
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   const { email, password } = formData;
   const { user, isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.auth
   );
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -30,6 +33,7 @@ function Login() {
       toast.success("Successfully logged in!!");
       navigate("/tests");
       dispatch(getTests());
+      dispatch(getAllResults());
     }
     dispatch(reset());
   }, [dispatch, isError, isSuccess, user]);
@@ -48,9 +52,11 @@ function Login() {
     };
     dispatch(login(userData));
   };
+
   if (isLoading) {
     return <Spinner />;
   }
+
   return (
     <FormBack
       img={LoginLogo}

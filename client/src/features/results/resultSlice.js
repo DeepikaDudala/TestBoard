@@ -1,21 +1,19 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import testsService from "./testsService";
-
-const tests = JSON.parse(localStorage.getItem("tests"));
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import resultsService from "./resultsService";
 const initialState = {
-  tests: tests ? tests : [],
+  result: [],
   isLoading: false,
-  isError: false,
   isSuccess: false,
+  isError: false,
   message: "",
 };
 
-export const getTests = createAsyncThunk(
-  "tests/getTests",
-  async (_, thunkAPI) => {
+export const getResult = createAsyncThunk(
+  "result/getResult",
+  async (id, thunkAPI) => {
     try {
-      return await testsService.getTests();
+      const token = thunkAPI.getState().auth.user.token;
+      return await resultsService.getResult(id, token);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -25,14 +23,12 @@ export const getTests = createAsyncThunk(
     }
   }
 );
-
-const testsSlice = createSlice({
-  name: "tests",
+const resultSlice = createSlice({
+  name: "result",
   initialState,
   reducers: {
     reset: (state) => {
-      localStorage.removeItem("tests");
-      state.tests = [];
+      state.result = [];
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -41,16 +37,16 @@ const testsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getTests.pending, (state) => {
+      .addCase(getResult.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getTests.fulfilled, (state, action) => {
+      .addCase(getResult.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.tests = action.payload;
+        state.result = action.payload;
       })
-      .addCase(getTests.rejected, (state, action) => {
+      .addCase(getResult.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -58,5 +54,5 @@ const testsSlice = createSlice({
   },
 });
 
-export default testsSlice.reducer;
-export const { reset } = testsSlice.actions;
+export default resultSlice.reducer;
+export const { reset } = resultSlice.actions;

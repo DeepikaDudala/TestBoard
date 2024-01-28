@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import NoData from "../assets/NoData.svg";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Instructions from "../components/Instructions";
 import {
   getTest,
@@ -26,10 +26,10 @@ function Test() {
       dispatch(removeTest());
     }
     if (takeTest) {
-      console.log(`first`);
       dispatch(getTest(id));
     }
   }, [takeTest, isError]);
+
   return (
     <div className="container mt-5">
       {test ? (

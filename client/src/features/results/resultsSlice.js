@@ -1,21 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import testsService from "./testsService";
-
-const tests = JSON.parse(localStorage.getItem("tests"));
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import resultsService from "./resultsService";
+const results = JSON.parse(localStorage.getItem("results"));
 const initialState = {
-  tests: tests ? tests : [],
+  results: results ? results : [],
   isLoading: false,
-  isError: false,
   isSuccess: false,
+  isError: false,
   message: "",
 };
-
-export const getTests = createAsyncThunk(
-  "tests/getTests",
+export const getAllResults = createAsyncThunk(
+  "results/getAllResults",
   async (_, thunkAPI) => {
     try {
-      return await testsService.getTests();
+      return await resultsService.getAllResults();
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.message) ||
@@ -26,13 +23,13 @@ export const getTests = createAsyncThunk(
   }
 );
 
-const testsSlice = createSlice({
-  name: "tests",
+const resultsSlice = createSlice({
+  name: "results",
   initialState,
   reducers: {
     reset: (state) => {
-      localStorage.removeItem("tests");
-      state.tests = [];
+      localStorage.removeItem("results");
+      state.results = [];
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -41,16 +38,16 @@ const testsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getTests.pending, (state) => {
+      .addCase(getAllResults.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getTests.fulfilled, (state, action) => {
+      .addCase(getAllResults.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.tests = action.payload;
+        state.results = action.payload;
       })
-      .addCase(getTests.rejected, (state, action) => {
+      .addCase(getAllResults.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -58,5 +55,5 @@ const testsSlice = createSlice({
   },
 });
 
-export default testsSlice.reducer;
-export const { reset } = testsSlice.actions;
+export default resultsSlice.reducer;
+export const { reset } = resultsSlice.actions;

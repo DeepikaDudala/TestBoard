@@ -16,12 +16,8 @@ const getAllResults = AsyncHandler(async (req, res) => {
       throw new Error("No Results Found");
     }
     res.status(200).json({
-      status: "success",
       testName: test.testName,
-      count: results.length,
-      data: {
-        results,
-      },
+      results,
     });
   } catch (err) {
     res.status(500);
@@ -30,8 +26,8 @@ const getAllResults = AsyncHandler(async (req, res) => {
 });
 const getResult = AsyncHandler(async (req, res) => {
   try {
-    const result = await Result.find({
-      studentId: req.user.id,
+    const result = await Result.findOne({
+      studentId: req.user._id,
       _id: req.params.id,
     }).select({
       testName: 1,
@@ -44,10 +40,7 @@ const getResult = AsyncHandler(async (req, res) => {
       throw new Error("Result not found");
     }
     res.status(200).json({
-      status: "success",
-      data: {
-        result,
-      },
+      result,
     });
   } catch (err) {
     res.status(400);
@@ -65,11 +58,7 @@ const getResults = AsyncHandler(async (req, res) => {
       throw new Error("Results not found");
     }
     res.status(200).json({
-      status: "success",
-      count: results.length,
-      data: {
-        results,
-      },
+      results,
     });
   } catch (err) {
     res.status(400);

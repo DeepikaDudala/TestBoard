@@ -1,9 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getResult } from "../features/results/resultSlice";
 
-function CardComponent({ id, name, buttonText, buttonType }) {
+function CardComponent({ id, name, buttonText }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleTest = () => {
-    navigate(`/tests/${id}`);
+    if (buttonText == "Take Test") navigate(`/tests/${id}`);
+    else if (buttonText == "View Result") {
+      dispatch(getResult(id));
+      navigate(`/results/${id}`);
+    }
   };
   return (
     <div>
@@ -12,7 +19,7 @@ function CardComponent({ id, name, buttonText, buttonType }) {
           <div className="card-body p-3 h5">{name}</div>
           <button
             type="submit"
-            className={`btn  ${buttonType}`}
+            className={`btn  btn-primary`}
             onClick={handleTest}
           >
             {buttonText}

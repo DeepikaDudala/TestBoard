@@ -1,7 +1,8 @@
+import OnlineTest from "../assets/OnlineTest.svg";
 function Home() {
   return (
     <>
-      <h1>Home</h1>
+      <img src={OnlineTest} alt="" className="w-75" />
     </>
   );
 }
