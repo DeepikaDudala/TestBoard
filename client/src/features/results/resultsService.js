@@ -1,6 +1,4 @@
-import axios from "axios";
-axios.defaults.baseURL = "http://localhost:5000/api/v1";
-axios.defaults.withCredentials = "include";
+import axios from "../axios";
 const API_URL = "results/";
 
 //Get All Results
@@ -10,7 +8,7 @@ const getAllResults = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(API_URL);
+  const response = await axios.get(API_URL, config);
   if (response.data) {
     localStorage.setItem("results", JSON.stringify(response.data.results));
   }
