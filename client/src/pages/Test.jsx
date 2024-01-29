@@ -7,9 +7,13 @@ import {
   getTest,
   reset as resetTest,
   remove as removeTest,
+  deleteTest,
 } from "../features/tests/testSlice";
 import Questions from "../components/Questions";
 import Spinner from "../components/Spinner";
+import { getTests } from "../features/tests/testsSlice";
+import { getAllResults } from "../features/results/resultsSlice";
+import { deleteResult } from "../features/results/resultSlice";
 
 function Test() {
   const { id } = useParams();
@@ -18,10 +22,11 @@ function Test() {
 
   const test = tests.find((test) => test._id === id);
   const questions = useSelector((state) => state.test.test.questions);
-  const { isError } = useSelector((state) => state.test);
-  const { isLoading } = useSelector((state) => state.test);
+  const { isError, isLoading } = useSelector((state) => state.test);
+  const { role } = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isError) {
@@ -31,6 +36,20 @@ function Test() {
       dispatch(getTest(id));
     }
   }, [takeTest, isError]);
+
+  useEffect(() => {
+    const deleteAndRedirect = async () => {
+      if (test && window.confirm("Do you want to delete test")) {
+        await dispatch(deleteTest(id));
+        await dispatch(getTests());
+        if (role == "teacher") await dispatch(deleteResult(id));
+        dispatch(getAllResults());
+      }
+      navigate("/tests");
+    };
+    if (role != "student") deleteAndRedirect();
+  }, [role == "teacher"]);
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -41,9 +60,9 @@ function Test() {
         takeTest || questions ? (
           questions && <Questions testId={id} questions={questions} />
         ) : (
-          <div>
-            <Instructions test={test} setTakeTest={setTakeTest} />
-          </div>
+          role == "student" && (
+            <div>{<Instructions test={test} setTakeTest={setTakeTest} />}</div>
+          )
         )
       ) : (
         <>

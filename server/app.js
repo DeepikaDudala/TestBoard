@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-const usersRoutes = require("./routes/usersRoutes");
 const cors = require("cors");
+const usersRoutes = require("./routes/usersRoutes");
 const testRoutes = require("./routes/testsRoutes");
 const resultsRoutes = require("./routes/resultsRoutes");
 const errorHandler = require("./middlewares/errorHandler");
@@ -11,7 +11,7 @@ app.use(
   cors({
     credentials: true,
     origin: "http://localhost:5173",
-    methods: ["POST", "GET"],
+    methods: ["POST", "GET", "DELETE"],
   })
 );
 app.use(cookieParser());

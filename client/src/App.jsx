@@ -15,11 +15,11 @@ import NotFound from "./pages/NotFound";
 import { getTests } from "./features/tests/testsSlice";
 import { getAllResults } from "./features/results/resultsSlice";
 import { useEffect } from "react";
+import NewTestCreate from "./components/NewTestCreate";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (user) {
       dispatch(getTests());
@@ -40,6 +40,7 @@ function App() {
               <Route path="/results" element={<Results />} />
               <Route path="/results/:id" element={<ResultCard />} />
               <Route path="/tests/:id" element={<Test />} />
+              <Route path="/tests/createTest" element={<NewTestCreate />} />
             </>
           )}
           <Route path="*" element={<NotFound />}></Route>

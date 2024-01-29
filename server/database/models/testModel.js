@@ -8,7 +8,9 @@ const testSchema = new mongoose.Schema({
 
   duration: {
     type: Number,
-    required: [true, "Please specify the test duration in minutes"],
+    default: function () {
+      return this.questions.length;
+    },
   },
   questions: [
     {
@@ -18,7 +20,7 @@ const testSchema = new mongoose.Schema({
       },
       options: [String],
       correctAnswer: {
-        type: Number,
+        type: String,
         required: [true, "Please provide the index of the correct answer"],
       },
     },

@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import testsService from "./testsService";
 
-const test = JSON.parse(localStorage.getItem("test"));
-
 const initialState = {
-  test: test ? test : [],
+  test: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -33,6 +31,23 @@ export const createResult = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await testsService.createResult(id, answers, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+export const deleteTest = createAsyncThunk(
+  "test/deleteTest",
+  async (id, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      return await testsService.deleteTest(id, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -75,6 +90,15 @@ const testSlice = createSlice({
         state.test = action.payload;
       })
       .addCase(getTest.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteTest.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTest.fulfilled, (state) => initialState)
+      .addCase(deleteTest.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

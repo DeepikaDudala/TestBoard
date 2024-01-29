@@ -21,7 +21,7 @@ const userRegister = AsyncHandler(async (req, res) => {
       _id: user._id,
       email: user.email,
       role: user.role,
-      token: createToken(res, user._id),
+      token: createToken(user._id),
     });
   } catch (err) {
     res.status(400);
@@ -52,7 +52,7 @@ const userLogin = AsyncHandler(async (req, res) => {
       _id: user._id,
       email: user.email,
       role: user.role,
-      token: createToken(res, user.id),
+      token: createToken(user.id),
     });
   } catch (err) {
     res.status(400);
@@ -60,11 +60,10 @@ const userLogin = AsyncHandler(async (req, res) => {
   }
 });
 
-const createToken = (res, id) => {
+const createToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
-  res.cookie("sahi", "hello");
   return token;
 };
 

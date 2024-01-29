@@ -18,6 +18,7 @@ function Results() {
               name={testName}
               key={_id}
               buttonText="View Result"
+              buttonType="btn-primary"
               id={_id}
             />
           ))}

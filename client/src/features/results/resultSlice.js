@@ -23,17 +23,26 @@ export const getResult = createAsyncThunk(
     }
   }
 );
+export const deleteResult = createAsyncThunk(
+  "result/deleteResult",
+  async (id, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      return await resultsService.deleteResults(id, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 const resultSlice = createSlice({
   name: "result",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.result = [];
-      state.isError = false;
-      state.isSuccess = false;
-      state.isLoading = false;
-      state.message = "";
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -47,6 +56,15 @@ const resultSlice = createSlice({
         state.result = action.payload;
       })
       .addCase(getResult.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteResult.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteResult.fulfilled, (state) => initialState)
+      .addCase(deleteResult.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

@@ -26,15 +26,27 @@ const getAllResults = AsyncHandler(async (req, res) => {
 });
 const getResult = AsyncHandler(async (req, res) => {
   try {
-    const result = await Result.findOne({
-      studentId: req.user._id,
-      _id: req.params.id,
-    }).select({
-      testName: 1,
-      total: 1,
-      scored: 1,
-      percentage: 1,
-    });
+    let result;
+    if (req.user.role != "student") {
+      const test = await Test.findById(req.params.id).select({ testName: 1 });
+      const results = await Result.find({ testId: req.params.id }).select({
+        studentName: 1,
+        total: 1,
+        scored: 1,
+        percentage: 1,
+      });
+      result = { testName: test.testName, results };
+    } else {
+      result = await Result.findOne({
+        studentId: req.user._id,
+        _id: req.params.id,
+      }).select({
+        testName: 1,
+        total: 1,
+        scored: 1,
+        percentage: 1,
+      });
+    }
     if (!result) {
       res.status(404);
       throw new Error("Result not found");
@@ -49,10 +61,15 @@ const getResult = AsyncHandler(async (req, res) => {
 });
 const getResults = AsyncHandler(async (req, res) => {
   try {
-    const results = await Result.find({ studentId: req.user.id }).select({
-      testName: 1,
-      _id: 1,
-    });
+    let results;
+    if (req.user.role != "student") {
+      results = await Test.find().select("-questions");
+    } else {
+      results = await Result.find({ studentId: req.user._id }).select({
+        testName: 1,
+        _id: 1,
+      });
+    }
     if (!results) {
       res.status(404);
       throw new Error("Results not found");
@@ -77,7 +94,7 @@ const createResult = AsyncHandler(async (req, res) => {
     //SCORE CALCULATION
     let score = 0;
     answers.forEach((answer, index) => {
-      if (answer === test.questions[index].correctAnswer) score++;
+      if (answer == test.questions[index].correctAnswer) score++;
     });
     const percentage = (score / test.totalMarks) * 100;
 
@@ -93,6 +110,7 @@ const createResult = AsyncHandler(async (req, res) => {
       new: true,
       upsert: true,
     });
+    console.log(result);
     res.status(200).json({
       result,
     });
@@ -103,7 +121,7 @@ const createResult = AsyncHandler(async (req, res) => {
 });
 const deleteTestResults = AsyncHandler(async (req, res) => {
   try {
-    const results = await Result.deleteMany({ test: req.params.id });
+    const results = await Result.deleteMany({ testId: req.params.id });
     if (!results) {
       res.status(404);
       throw new Error("Results not found");

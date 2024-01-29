@@ -29,13 +29,13 @@ exports.getTest = AsyncHandler(async (req, res) => {
   }
 });
 exports.addTest = AsyncHandler(async (req, res) => {
-  const { testName, duration, questions } = req.body;
-  if (!testName || !duration || !questions) {
+  const { testName, questions } = req.body;
+  if (!testName || !questions) {
     res.status(401);
-    throw new Error("Test must contains testName, duration, questions ");
+    throw new Error("Test must contains testName, questions ");
   }
   try {
-    const test = await Test.create({ testName, duration, questions });
+    const test = await Test.create({ testName, questions });
     res.status(201).json({
       status: "success",
       data: {
@@ -44,7 +44,7 @@ exports.addTest = AsyncHandler(async (req, res) => {
     });
   } catch (err) {
     res.status(400);
-    throw new Error("failed to add test");
+    throw new Error(err);
   }
 });
 exports.deleteTest = AsyncHandler(async (req, res) => {

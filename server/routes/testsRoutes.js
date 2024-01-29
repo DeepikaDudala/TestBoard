@@ -7,7 +7,7 @@ const {
   addTest,
   deleteTest,
 } = require("../controllers/testControllers");
-const authProtect = require("../middlewares/authProtect");
+const { authProtect } = require("../middlewares/authProtect");
 const { createResult } = require("../controllers/resultControllers");
 
 router.route("/").get(getAllTests);
@@ -15,6 +15,6 @@ router.route("/:id").get(authProtect, getTest);
 router.post("/:id/createResult", authProtect, createResult);
 
 router.route("/addTest").post(authProtect, protect, addTest);
-router.route("/deleteTest/:id").delete(authProtect, protect, deleteTest);
+router.route("/:id").delete(authProtect, protect, deleteTest);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const {
 } = require("../controllers/userControllers");
 const { userRegister, userLogin } = require("../controllers/authController");
 const protect = require("../middlewares/protect");
-const authProtect = require("../middlewares/authProtect");
+const { authProtect } = require("../middlewares/authProtect");
 
 router.route("/register").post(userRegister);
 router.route("/login").post(userLogin);

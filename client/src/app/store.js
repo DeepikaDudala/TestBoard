@@ -4,6 +4,7 @@ import testsReducer from "../features/tests/testsSlice";
 import testReducer from "../features/tests/testSlice";
 import resultsReducer from "../features/results/resultsSlice";
 import resultReducer from "../features/results/resultSlice";
+import createTestReducer from "../features/tests/createTestSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -11,5 +12,6 @@ export const store = configureStore({
     test: testReducer,
     results: resultsReducer,
     result: resultReducer,
+    createTest: createTestReducer,
   },
 });

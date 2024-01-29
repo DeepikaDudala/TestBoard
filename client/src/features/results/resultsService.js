@@ -20,13 +20,23 @@ const getResult = async (id, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios(API_URL + id, config);
+  const response = await axios.get(API_URL + id, config);
   return response.data.result;
 };
-
+//delete student results
+const deleteResults = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(API_URL + id, config);
+  return response.data;
+};
 const resultsService = {
   getAllResults,
   getResult,
+  deleteResults,
 };
 
 export default resultsService;
