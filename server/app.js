@@ -10,14 +10,16 @@ const cookieParser = require("cookie-parser");
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     methods: ["POST", "GET", "DELETE"],
   })
 );
 app.use(cookieParser());
 app.use(express.json());
-app.use(morgan("tiny"));
-
+app.use(express.urlencoded({ extended: true }));
+if (process.env.NODE_ENV == "development") {
+  app.use(morgan("tiny"));
+}
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/tests", testRoutes);
 app.use("/api/v1/results", resultsRoutes);
