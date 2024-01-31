@@ -26,14 +26,16 @@ app.use("/api/v1/tests", testRoutes);
 app.use("/api/v1/results", resultsRoutes);
 
 //Server frontend
-// if (process.env.NODE_ENV == "production") {
-//   app.use(express.static(path.join(__dirname, "../client/build")));
-//   app.get("*", (req, res) =>
-//     res.sendFile(
-//       path.resolve(__dirnmae, "../", "client", "build", "index.html")
-//     )
-//   );
-// }
+if (process.env.NODE_ENV == "production") {
+  app.use(express.static(path.join(__dirname, "../client/dist")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "../", "client", "dist", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("please set to production");
+  });
+}
 
 app.use(errorHandler);
 module.exports = app;
