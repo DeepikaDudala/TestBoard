@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 const usersRoutes = require("./routes/usersRoutes");
 const testRoutes = require("./routes/testsRoutes");
 const resultsRoutes = require("./routes/resultsRoutes");
@@ -24,10 +25,15 @@ app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/tests", testRoutes);
 app.use("/api/v1/results", resultsRoutes);
 
-app.all("*", (req, res, next) => {
-  res.status(500);
-  throw new Error(`cannot find ${req.url}`);
-});
+//Server frontend
+// if (process.env.NODE_ENV == "production") {
+//   app.use(express.static(path.join(__dirname, "../client/build")));
+//   app.get("*", (req, res) =>
+//     res.sendFile(
+//       path.resolve(__dirnmae, "../", "client", "build", "index.html")
+//     )
+//   );
+// }
 
 app.use(errorHandler);
 module.exports = app;

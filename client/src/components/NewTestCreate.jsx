@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NewQuestions from "./NewQuestions";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,13 +10,13 @@ import {
 import Spinner from "./Spinner";
 import { getTests } from "../features/tests/testsSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function NewTestCreate() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { questions, testName, isLoading } = useSelector(
-    (state) => state.createTest
-  );
+  const { questions, testName, isLoading, isError, message, isSuccess } =
+    useSelector((state) => state.createTest);
   const handleAddQuestion = (e) => {
     e.preventDefault();
     dispatch(onAddQuestion());
@@ -30,15 +30,20 @@ function NewTestCreate() {
     const submitTest = async () => {
       try {
         await dispatch(submitCreateTest({ testName, questions }));
-        await dispatch(resetCreateTest());
-        await dispatch(getTests());
-        navigate("/tests");
       } catch (err) {
         console.log(err);
       }
     };
     submitTest();
   };
+  useEffect(() => {
+    if (isError) toast.error(message);
+    else if (isSuccess) {
+      dispatch(resetCreateTest());
+      dispatch(getTests());
+      navigate("/tests");
+    }
+  }, [isError, isSuccess]);
   if (isLoading) {
     return <Spinner />;
   }

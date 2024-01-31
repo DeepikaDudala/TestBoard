@@ -5,7 +5,7 @@ import {
 } from "../features/tests/createTestSlice";
 
 function NewQuestions({ index }) {
-  const { text, options, correctAnswer } = useSelector(
+  const { text, options } = useSelector(
     (state) => state.createTest.questions[index]
   );
   const dispatch = useDispatch();
@@ -52,6 +52,7 @@ function NewQuestions({ index }) {
               placeholder={`Option ${i + 1}`}
               value={value}
               onChange={(e) => handleOptionsChange(e, i)}
+              required
             />
           </li>
         ))}
@@ -66,6 +67,7 @@ function NewQuestions({ index }) {
           required
           onChange={handleChange}
         >
+          <option value="">options</option>
           <option value="0">{options[0]}</option>
           <option value="1">{options[1]}</option>
           <option value="2">{options[2]}</option>

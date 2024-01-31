@@ -41,6 +41,7 @@ function Test() {
     const deleteAndRedirect = async () => {
       if (test && window.confirm("Do you want to delete test")) {
         await dispatch(deleteTest(id));
+        dispatch(deleteResult(id));
         await dispatch(getTests());
         if (role == "teacher") await dispatch(deleteResult(id));
         dispatch(getAllResults());

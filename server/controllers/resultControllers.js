@@ -45,6 +45,7 @@ const getResult = AsyncHandler(async (req, res) => {
         total: 1,
         scored: 1,
         percentage: 1,
+        details: 1,
       });
     }
     if (!result) {
@@ -90,11 +91,20 @@ const createResult = AsyncHandler(async (req, res) => {
       req.status(400);
       throw new Error("cannot find test");
     }
-
+    let details = [];
     //SCORE CALCULATION
     let score = 0;
-    answers.forEach((answer, index) => {
-      if (answer == test.questions[index].correctAnswer) score++;
+    answers.forEach((yourAnswer, index) => {
+      let correctAnswer = test.questions[index].correctAnswer;
+      if (yourAnswer == correctAnswer) {
+        score++;
+      }
+      details.push({
+        question: test.questions[index].text,
+        correctAnswer,
+        yourAnswer,
+        options: [...test.questions[index].options],
+      });
     });
     const percentage = (score / test.totalMarks) * 100;
 
@@ -105,12 +115,12 @@ const createResult = AsyncHandler(async (req, res) => {
       total: test.totalMarks,
       scored: score,
       percentage,
+      details,
     };
     const result = await Result.findOneAndUpdate(filter, update, {
       new: true,
       upsert: true,
     });
-    console.log(result);
     res.status(200).json({
       result,
     });

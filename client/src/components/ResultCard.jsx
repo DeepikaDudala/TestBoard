@@ -7,6 +7,7 @@ import {
   getResult,
   reset as resultReset,
 } from "../features/results/resultSlice";
+import DetailsComp from "./DetailsComp";
 
 function ResultCard() {
   const { result, isLoading } = useSelector((state) => state.result);
@@ -78,9 +79,9 @@ function ResultCard() {
 
   return (
     result && (
-      <div className="container text-center ">
-        <div className="row justify-content-center">
-          <div className="col col-md-7">
+      <div className="container ">
+        <div className="row justify-content-center ">
+          <div className="col-8 text-center ">
             <div className="card mt-5" style={{ backgroundColor: "#e7f7fd" }}>
               <div className="card-body">
                 <div className="row pb-2 align-items-center">
@@ -105,6 +106,9 @@ function ResultCard() {
               </div>
             </div>
           </div>
+          <div className=" col-8">
+            <DetailsComp result={result} />
+          </div>{" "}
         </div>
       </div>
     )

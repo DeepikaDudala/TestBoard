@@ -70,7 +70,6 @@ const testSlice = createSlice({
       state.message = "";
     },
     remove: (state) => {
-      localStorage.removeItem("test");
       state.test = [];
       state.isError = false;
       state.isSuccess = false;

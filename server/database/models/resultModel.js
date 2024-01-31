@@ -24,6 +24,14 @@ const resultSchema = new mongoose.Schema({
   percentage: {
     type: Number,
   },
+  details: [
+    {
+      question: String,
+      correctAnswer: String,
+      yourAnswer: String,
+      options: [String],
+    },
+  ],
 });
 
 module.exports = mongoose.model("Result", resultSchema);
